@@ -1,14 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import ProfileForm from '@/components/ProfileForm'
 import { useRouter } from 'next/navigation'
 import { useForm, SubmitHandler } from 'react-hook-form'
-
-interface ProfileValues {
-	username: string
-	email: string
-}
+import ProfileForm, { ProfileValues } from '@/components/ProfileForm'
 
 export default function ProfilePage() {
 	const router = useRouter()
@@ -22,6 +17,7 @@ export default function ProfilePage() {
 				router.push('/login')
 				return
 			}
+
 			try {
 				const res = await fetch('http://localhost:5000/profile', {
 					headers: { Authorization: `Bearer ${token}` },
@@ -51,6 +47,7 @@ export default function ProfilePage() {
 			router.replace('/login')
 			return
 		}
+
 		try {
 			const res = await fetch('http://localhost:5000/profile', {
 				method: 'PATCH',
@@ -72,7 +69,7 @@ export default function ProfilePage() {
 						const firstKey = Object.keys(json.message[field])[0]
 						methods.setError(field as keyof ProfileValues, {
 							type: 'server',
-							message: String(json.message[field][firstKey]),
+							message: json.message[field][firstKey],
 						})
 					}
 					return
@@ -90,5 +87,9 @@ export default function ProfilePage() {
 
 	if (!user) return <p>Загрузка...</p>
 
-	return <ProfileForm user={user} methods={methods} onSubmit={handleUpdate} />
+	return (
+		<div>
+			<ProfileForm user={user} methods={methods} onSubmit={handleUpdate} />
+		</div>
+	)
 }

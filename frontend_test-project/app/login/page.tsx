@@ -2,13 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import LoginForm from '@/components/LoginForm'
+import LoginForm, { LoginFormValues } from '@/components/LoginForm'
 import { useEffect } from 'react'
-
-interface LoginFormValues {
-	login: string
-	password: string
-}
 
 export default function LoginPage() {
 	const router = useRouter()
@@ -16,9 +11,7 @@ export default function LoginPage() {
 
 	useEffect(() => {
 		const token = localStorage.getItem('token')
-		if (token) {
-			router.push('/profile')
-		}
+		if (token) router.push('/profile')
 	}, [router])
 
 	const handleLogin: SubmitHandler<LoginFormValues> = async data => {
@@ -29,7 +22,6 @@ export default function LoginPage() {
 				body: JSON.stringify(data),
 			})
 			const json = await res.json()
-
 			if (!res.ok) {
 				if (res.status === 400 && typeof json.message === 'object') {
 					for (const field in json.message) {
@@ -44,7 +36,6 @@ export default function LoginPage() {
 				}
 				return
 			}
-
 			localStorage.setItem('token', json.token)
 			router.push('/profile')
 		} catch (err: any) {

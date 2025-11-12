@@ -5,9 +5,8 @@ import { Repository } from 'typeorm'
 import { DtoRegister } from './dto/register.dto'
 import { DtoLogin } from './dto/login/login-input.dto'
 import * as bcrypt from 'bcrypt'
-import { DtoReturnData } from './dto/login/login_output.dto'
+import { DtoReturnData } from './dto/login/login-output.dto'
 import { JwtService } from '@nestjs/jwt'
-import { Secret } from 'src/common/constants/secret'
 
 @Injectable()
 export class AuthService {
@@ -44,10 +43,11 @@ export class AuthService {
 	async login(dto: DtoLogin): Promise<DtoReturnData> {
 		const dataUser = await this.repositoryUsers.findOne({
 			where: [{ login: dto.login }],
+			select: ['id', 'password'],
 		})
 		if (!dataUser) {
 			throw new HttpException(
-				'Пользователя с таким логином не существует.',
+				'Неверный логин или пароль.',
 				HttpStatus.BAD_REQUEST
 			)
 		}
@@ -57,12 +57,15 @@ export class AuthService {
 			dataUser.password
 		)
 		if (!acceptedPassword) {
-			throw new HttpException('Пароль не верный.', HttpStatus.BAD_REQUEST)
+			throw new HttpException(
+				'Неверный логин или пароль.',
+				HttpStatus.BAD_REQUEST
+			)
 		}
 
 		const token = await this.jwt.signAsync(
 			{ id: dataUser.id },
-			{ secret: Secret.secret_token, expiresIn: '24h' }
+			{ secret: process.env.SECRET, expiresIn: '24h' }
 		)
 		return {
 			token,

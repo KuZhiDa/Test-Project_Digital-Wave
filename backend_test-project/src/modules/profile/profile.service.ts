@@ -11,7 +11,10 @@ export class ProfileService {
 	) {}
 
 	async checkUser(id: number): Promise<Users> {
-		const dataUser = await this.usersRepository.findOne({ where: { id } })
+		const dataUser = await this.usersRepository.findOne({
+			where: { id },
+			select: ['id', 'username', 'email'],
+		})
 		if (!dataUser) {
 			throw new HttpException(
 				'Пользователя с таким id нет.',

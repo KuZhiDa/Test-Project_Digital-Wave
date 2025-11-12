@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { GlobalExceptionsFilter } from './common/exception-filters/global.filter'
 import { BadRequestException, ValidationPipe } from '@nestjs/common'
+import helmet from 'helmet'
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
@@ -20,7 +21,12 @@ async function bootstrap() {
 			},
 		})
 	)
-	app.enableCors({ origin: 'http://localhost:3000' })
+	app.use(helmet())
+	app.enableCors({
+		origin: 'http://localhost:3000',
+		methods: ['GET', 'POST', 'PATCH'],
+		credentials: true,
+	})
 	await app.listen(5000)
 }
 bootstrap()

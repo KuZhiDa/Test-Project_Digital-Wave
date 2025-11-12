@@ -3,15 +3,22 @@
 import {
 	SubmitHandler,
 	UseFormRegister,
-	FieldErrors,
 	UseFormHandleSubmit,
+	FieldErrors,
 } from 'react-hook-form'
 
 interface RegisterFormProps {
-	onSubmit: SubmitHandler<any>
-	register: UseFormRegister<any>
-	handleSubmit: UseFormHandleSubmit<any>
-	errors: FieldErrors<any>
+	onSubmit: SubmitHandler<RegisterFormValues>
+	register: UseFormRegister<RegisterFormValues>
+	handleSubmit: UseFormHandleSubmit<RegisterFormValues>
+	errors: FieldErrors<RegisterFormValues>
+}
+
+export interface RegisterFormValues {
+	login: string
+	email: string
+	username: string
+	password: string
 }
 
 export default function RegisterForm({
