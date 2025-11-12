@@ -45,7 +45,7 @@ export default function RegisterPage() {
 			}
 
 			alert(json.message)
-			router.replace('/login')
+			router.push('/login')
 		} catch (err: any) {
 			alert(err.message || 'Неизвестная ошибка')
 		}

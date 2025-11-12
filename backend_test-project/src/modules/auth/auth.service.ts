@@ -7,7 +7,7 @@ import { DtoLogin } from './dto/login/login-input.dto'
 import * as bcrypt from 'bcrypt'
 import { DtoReturnData } from './dto/login/login_output.dto'
 import { JwtService } from '@nestjs/jwt'
-import { Secret } from 'src/constants/secret'
+import { Secret } from 'src/common/constants/secret'
 
 @Injectable()
 export class AuthService {
@@ -31,7 +31,8 @@ export class AuthService {
 			)
 		}
 
-		const passwordHash = await bcrypt.hash(dto.password, 10)
+		const salt = await bcrypt.genSalt(10)
+		const passwordHash = await bcrypt.hash(dto.password, salt)
 
 		dto.password = passwordHash
 

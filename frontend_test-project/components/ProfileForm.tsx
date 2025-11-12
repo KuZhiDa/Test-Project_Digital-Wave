@@ -29,7 +29,6 @@ export default function ProfileForm({
 					{...register('username')}
 					placeholder='Username'
 					className='border p-2 rounded w-full'
-					defaultValue={user.username}
 				/>
 				{errors.username?.message && (
 					<p className='text-red-500 text-sm'>
@@ -42,7 +41,6 @@ export default function ProfileForm({
 					{...register('email')}
 					placeholder='Email'
 					className='border p-2 rounded w-full'
-					defaultValue={user.email}
 				/>
 				{errors.email?.message && (
 					<p className='text-red-500 text-sm'>{String(errors.email.message)}</p>

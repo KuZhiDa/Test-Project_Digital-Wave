@@ -21,16 +21,18 @@ export class ProfileService {
 		return dataUser
 	}
 
-	async getInfo(id: number): Promise<{ Username: string; Email: string }> {
+	async getInfo(id: number): Promise<{ username: string; email: string }> {
 		const dataUser = await this.checkUser(id)
-
-		return { Username: dataUser.username, Email: dataUser.email }
+		return { username: dataUser.username, email: dataUser.email }
 	}
 
-	async updateInfo(dto: DtoUpdate, id: number): Promise<{ message: string }> {
-		await this.checkUser(id)
-
-		await this.usersRepository.update(id, dto)
-		return { message: 'Данные успешно обновлены.' }
+	async updateInfo(
+		dto: DtoUpdate,
+		id: number
+	): Promise<{ username: string; email: string }> {
+		const user = await this.checkUser(id)
+		Object.assign(user, dto)
+		const updatedUser = await this.usersRepository.save(user)
+		return { username: updatedUser.username, email: updatedUser.email }
 	}
 }
