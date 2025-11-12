@@ -1,26 +1,25 @@
 'use client'
 
-import { useForm, SubmitHandler } from 'react-hook-form'
+import {
+	SubmitHandler,
+	UseFormRegister,
+	FieldErrors,
+	UseFormHandleSubmit,
+} from 'react-hook-form'
 
-interface AuthFormProps {
-	onSubmit: SubmitHandler<RegisterFormValues>
-	submitLabel: string
+interface RegisterFormProps {
+	onSubmit: SubmitHandler<any>
+	register: UseFormRegister<any>
+	handleSubmit: UseFormHandleSubmit<any>
+	errors: FieldErrors<any>
 }
 
-interface RegisterFormValues {
-	login: string
-	email: string
-	username: string
-	password: string
-}
-
-export default function AuthForm({ onSubmit, submitLabel }: AuthFormProps) {
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<RegisterFormValues>()
-
+export default function RegisterForm({
+	onSubmit,
+	register,
+	handleSubmit,
+	errors,
+}: RegisterFormProps) {
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -31,8 +30,8 @@ export default function AuthForm({ onSubmit, submitLabel }: AuthFormProps) {
 				placeholder='Login'
 				className='border p-2 rounded'
 			/>
-			{errors.login?.message && (
-				<span className='text-red-500'>{errors.login.message}</span>
+			{errors.login && (
+				<span className='text-red-500'>{errors.login.message?.toString()}</span>
 			)}
 
 			<input
@@ -43,8 +42,8 @@ export default function AuthForm({ onSubmit, submitLabel }: AuthFormProps) {
 				placeholder='Email'
 				className='border p-2 rounded'
 			/>
-			{errors.email?.message && (
-				<span className='text-red-500'>{errors.email.message}</span>
+			{errors.email && (
+				<span className='text-red-500'>{errors.email.message?.toString()}</span>
 			)}
 
 			<input
@@ -52,8 +51,10 @@ export default function AuthForm({ onSubmit, submitLabel }: AuthFormProps) {
 				placeholder='Username'
 				className='border p-2 rounded'
 			/>
-			{errors.username?.message && (
-				<span className='text-red-500'>{errors.username.message}</span>
+			{errors.username && (
+				<span className='text-red-500'>
+					{errors.username.message?.toString()}
+				</span>
 			)}
 
 			<input
@@ -65,12 +66,14 @@ export default function AuthForm({ onSubmit, submitLabel }: AuthFormProps) {
 				placeholder='Password'
 				className='border p-2 rounded'
 			/>
-			{errors.password?.message && (
-				<span className='text-red-500'>{errors.password.message}</span>
+			{errors.password && (
+				<span className='text-red-500'>
+					{errors.password.message?.toString()}
+				</span>
 			)}
 
-			<button type='submit' className='bg-blue-500 text-white p-2 rounded'>
-				{submitLabel}
+			<button type='submit' className='bg-green-500 text-white p-2 rounded'>
+				Зарегистрироваться
 			</button>
 		</form>
 	)

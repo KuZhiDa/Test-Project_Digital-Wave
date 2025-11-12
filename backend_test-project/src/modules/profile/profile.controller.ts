@@ -10,13 +10,13 @@ export class ProfileController {
 
 	@UseGuards(JwtGuard)
 	@Get()
-	async getUser(@GetUser() id: number) {
-		this.profileService.getInfo(id)
+	async getUser(@GetUser('id') id: number) {
+		return await this.profileService.getInfo(id)
 	}
 
 	@UseGuards(JwtGuard)
 	@Patch()
 	async patchUser(@Body() dto: DtoUpdate, @GetUser() id: number) {
-		this.profileService.updateInfo(dto, id)
+		return await this.profileService.updateInfo(dto, id)
 	}
 }

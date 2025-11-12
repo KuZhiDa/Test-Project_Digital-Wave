@@ -1,12 +1,26 @@
 'use client'
 
-import AuthForm from '@/components/AuthForm'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
+import RegisterForm from '@/components/RegisterForm'
+
+interface RegisterFormValues {
+	login: string
+	email: string
+	username: string
+	password: string
+}
 
 export default function RegisterPage() {
 	const router = useRouter()
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors },
+	} = useForm<RegisterFormValues>()
 
-	const handleRegister = async (data: any) => {
+	const handleRegister: SubmitHandler<RegisterFormValues> = async data => {
 		try {
 			const res = await fetch('http://localhost:5000/auth/register', {
 				method: 'POST',
@@ -14,13 +28,35 @@ export default function RegisterPage() {
 				body: JSON.stringify(data),
 			})
 			const json = await res.json()
-			if (!res.ok) throw new Error(json.message || 'Ошибка регистрации')
+
+			if (!res.ok) {
+				if (res.status === 400 && typeof json.message === 'object') {
+					for (const field in json.message) {
+						const firstKey = Object.keys(json.message[field])[0]
+						setError(field as keyof RegisterFormValues, {
+							type: 'server',
+							message: json.message[field][firstKey],
+						})
+					}
+				} else {
+					alert(json.message)
+				}
+				return
+			}
+
 			alert(json.message)
-			router.push('/login')
+			router.replace('/login')
 		} catch (err: any) {
-			alert(err.message)
+			alert(err.message || 'Неизвестная ошибка')
 		}
 	}
 
-	return <AuthForm onSubmit={handleRegister} submitLabel='Зарегистрироваться' />
+	return (
+		<RegisterForm
+			onSubmit={handleRegister}
+			register={register}
+			handleSubmit={handleSubmit}
+			errors={errors}
+		/>
+	)
 }
