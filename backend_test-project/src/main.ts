@@ -27,6 +27,6 @@ async function bootstrap() {
 		methods: ['GET', 'POST', 'PATCH'],
 		credentials: true,
 	})
-	await app.listen(5000)
+	await app.listen(process.env.PORT!)
 }
 bootstrap()

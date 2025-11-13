@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { AuthModule } from './modules/auth/auth.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Users } from './models/users.model'
-import { JwtStrategy } from './strategies/jwt.strategy'
+import { JwtStrategy } from './common/strategies/jwt.strategy'
 import { ProfileModule } from './modules/profile/profile.module'
 import { ConfigModule } from '@nestjs/config'
 

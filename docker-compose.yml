@@ -17,8 +17,8 @@ services:
       context: ./backend_test-project
       dockerfile: Dockerfile
     container_name: nest-docker-postgres
-    environment:
-      - PORT=5000
+    env_file:
+      - ./backend_test-project/.env
     ports:
       - '5000:5000'
     depends_on:
