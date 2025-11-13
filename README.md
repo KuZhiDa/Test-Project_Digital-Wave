@@ -61,6 +61,18 @@ http://localhost:3000
 
 # Запуск через Docker Compose
 
+### Перейдите в директорию backend_test-project:
+
+cd backend_test-project
+
+### Создайте файл .env:
+
+cp .env.example .env
+
+### Вернитесь в корень проекта:
+
+cd ..
+
 ### В корне проекта выполните команду:
 
 docker compose up --build
